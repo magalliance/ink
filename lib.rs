@@ -23,7 +23,7 @@ pub mod passport {
             Self { name, surname, birth, assets: Default::default(), client, owner: Self::env().caller(), is_active: true }
         }
 
-        /// Returns the current value of the Passport's boolean
+        /// Returns the current status of the Passport's boolean
         #[ink(message)]
         pub fn get_status(&self) -> bool {
             self.is_active
@@ -38,18 +38,18 @@ pub mod passport {
 
         /// Returns the current name of the Passport's
         #[ink(message)]
-        pub fn get_name(&self) -> String {
+        pub fn get_name(&self) -> &str {
             if self.owner == ink_env::caller() {
-                format!("{} {}", *self.surname, *self.name);
+                &format!("{} {}", *self.surname, *self.name)
             }
-            String::from(*self.name)
+            &self.name
         }
 
         /// Returns the client info of the Passport's only owner
         #[ink(message)]
-        pub fn get_info(&self) -> Client {
+        pub fn get_info(&self) -> &str {
             assert!(self.owner, ink_env::caller());
-            *self.client
+            &self.client
         }
     }
 
@@ -63,12 +63,8 @@ pub mod passport {
         fn it_works() {
             let mut passport = Passport::new("name", "surname", "birth", "inn");
             assert!(passport.get_status());
-
             passport.set_status(false);
             assert!(!passport.get_status());
-
-            passport.set_status(true);
-            assert!(passport.get_status());
         }
     }
 }
