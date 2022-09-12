@@ -6,6 +6,7 @@ use ink_lang as ink;
 pub mod passport {
     use ink_storage::traits::SpreadAllocate;
     use ink_prelude::string::String;
+
     #[ink(storage)]
     #[derive(SpreadAllocate)]
     pub struct Passport {
@@ -89,6 +90,7 @@ pub mod passport {
             passport.set_status(false);
             assert!(!passport.get_status());
             assert_eq!(passport.get_name(), "Ivanov Ivan".to_string());
+            assert_eq!(passport.get_info(), "INN: 123456".to_string());
         }
     }
 }
